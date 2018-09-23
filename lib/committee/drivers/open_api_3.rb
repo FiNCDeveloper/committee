@@ -96,20 +96,7 @@ module Committee::Drivers
 
       private
 
-      LINK_REQUIRED_FIELDS = [
-        :name
-      ].map(&:to_s).freeze
-
       attr_accessor :link_data
-
-      def check_required_fields!(param_data)
-        LINK_REQUIRED_FIELDS.each do |field|
-          if !param_data[field]
-            raise ArgumentError,
-                  "Committee: no #{field} section in link data."
-          end
-        end
-      end
     end
 
     class HeaderSchemaBuilder < SchemaBuilder
@@ -121,8 +108,6 @@ module Committee::Drivers
 
           header_parameters = link_data["parameters"].select { |param_data| param_data["in"] == "header" }
           header_parameters.each do |param_data|
-            check_required_fields!(param_data)
-
             param_schema = JsonSchema::Schema.new
 
             param_schema.type = [param_data["type"]]
@@ -156,8 +141,6 @@ module Committee::Drivers
 
           parameters = link_data["parameters"].reject { |param_data| param_data["in"] == "header" }
           parameters.each do |param_data|
-            check_required_fields!(param_data)
-
             param_schema = JsonSchema::Schema.new
 
             # We could probably use more validation here, but the formats

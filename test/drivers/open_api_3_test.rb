@@ -303,19 +303,6 @@ describe Committee::Drivers::OpenAPI3::ParameterSchemaBuilder do
     assert_equal({ "$ref" => "#/components/schemas/foo" }, schema_data)
   end
 
-  it "requires that certain fields are present" do
-    data = {
-      "parameters" => [
-        {
-        }
-      ]
-    }
-    e = assert_raises ArgumentError do
-      call(data)
-    end
-    assert_equal "Committee: no name section in link data.", e.message
-  end
-
   def call(data)
     Committee::Drivers::OpenAPI3::ParameterSchemaBuilder.new(data).call
   end
